@@ -4,7 +4,7 @@ import Bug from './Bug';
 import HUD from './HUD';
 import CompilerScan from './CompilerScan';
 
-const CodeEditor = () => {
+const CodeEditor = ({ fileName }) => {
   // Sample code lines with syntax highlighting
   const codeLines = [
     { lineNumber: 1, text: "import React from 'react';" },

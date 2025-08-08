@@ -102,6 +102,8 @@ button:focus-visible {
 
 .sidebar-icon:hover {
   background-color: #37373d;
+  color: #ffffff;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
 .sidebar-icon.active {
@@ -173,16 +175,15 @@ button:focus-visible {
   cursor: pointer;
   font-size: 13px;
   max-width: 150px;
+  user-select: none;
+  position: relative;
 }
-
-.tab:hover {
-  background-color: #1e1e1e;
-}
-
+.tab:hover { background-color: #3a3d41; }
 .tab.active {
   background-color: #1e1e1e;
   border-bottom: 2px solid #007acc;
 }
+.tab-title { padding-right: 4px; }
 
 .tab-icon {
   margin-right: 6px;
@@ -358,31 +359,23 @@ button:focus-visible {
 
 .terminal-content {
   flex: 1;
-  padding: 8px 16px;
+  padding: 6px 12px 8px 12px;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 18px;
-  background-color: #0c0c0c;
+  background-color: #000000;
   color: #cccccc;
   overflow-y: auto;
+  border-top: 1px solid #222;
 }
-
 .terminal-line {
-  margin-bottom: 2px;
+  margin-bottom: 1px;
+  display: flex;
+  gap: 4px;
 }
-
-.terminal-prompt {
-  color: #98c379;
-}
-
-.terminal-path {
-  color: #61afef;
-}
-
-.terminal-command {
-  color: #d4d4d4;
-}
-
+.terminal-prompt { color: #16c60c; }
+.terminal-path { color: #3b8eea; }
+.terminal-command { color: #dcdcaa; }
 .terminal-output {
   color: #cccccc;
 }
@@ -503,7 +496,8 @@ button:focus-visible {
   font-size: 13px;
   line-height: 19px;
   color: #d4d4d4;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: #1e1e1e;
   position: relative;
 }
