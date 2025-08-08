@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import CodeEditor from './CodeEditor';
+import StartScreen from './StartScreen';
+import { useGameStore } from '../store/gameStore';
 
 const initialTabs = [
   { id: 'main.js', title: 'main.js', icon: '📄' },
@@ -10,6 +12,7 @@ const initialTabs = [
 const IDELayout = () => {
   const [tabs, setTabs] = useState(initialTabs);
   const [activeTabId, setActiveTabId] = useState('main.js');
+  const { gameStarted } = useGameStore(state => ({ gameStarted: state.gameStarted }));
 
   const setActive = useCallback((id) => setActiveTabId(id), []);
   const closeTab = useCallback((e, id) => {
@@ -36,6 +39,9 @@ const IDELayout = () => {
 
   return (
     <div className="ide-container">
+      {/* Start Screen Overlay */}
+      <StartScreen />
+      
       {/* Left Sidebar */}
     <div className="sidebar">
         <div className="sidebar-header">

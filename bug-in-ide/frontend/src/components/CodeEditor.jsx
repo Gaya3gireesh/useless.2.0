@@ -4,6 +4,7 @@ import Bug from './Bug';
 import HUD from './HUD';
 import CompilerScan from './CompilerScan';
 import GameOverModal from './GameOverModal';
+import VictoryModal from './VictoryModal';
 import { useGameStore } from '../store/gameStore';
 
 const CodeEditor = ({ fileName }) => {
@@ -43,6 +44,9 @@ const CodeEditor = ({ fileName }) => {
       
       {/* Game Over Modal */}
       <GameOverModal />
+      
+      {/* Victory Modal */}
+      <VictoryModal />
     </div>
   );
 };

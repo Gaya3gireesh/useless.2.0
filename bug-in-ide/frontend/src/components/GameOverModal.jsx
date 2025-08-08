@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 
 const GameOverModal = () => {
@@ -9,13 +9,27 @@ const GameOverModal = () => {
     resetGame: state.resetGame
   }));
 
-  if (status !== 'dead') return null;
+  const [showModal, setShowModal] = useState(false);
+
+  // Show modal with a slight delay when game ends
+  useEffect(() => {
+    if (status === 'dead') {
+      const timer = setTimeout(() => setShowModal(true), 1000); // 1 second delay
+      return () => clearTimeout(timer);
+    } else {
+      setShowModal(false);
+    }
+  }, [status]);
+
+  if (!showModal) return null;
 
   const handleRestart = () => {
+    setShowModal(false);
     resetGame();
   };
 
   const handleClose = () => {
+    setShowModal(false);
     resetGame();
   };
 
