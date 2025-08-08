@@ -538,3 +538,43 @@ button:focus-visible {
   animation: cursor-blink 1s infinite;
   z-index: 1;
 }
+
+/* Bug avatar */
+.bug-avatar {
+  transition: transform 120ms ease;
+}
+
+@keyframes bug-wiggle-keyframes {
+  0% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(-8deg); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(2px) rotate(6deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.bug-wiggle {
+  animation: bug-wiggle-keyframes 180ms ease;
+}
+
+/* HUD styles */
+.hud-container {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: rgba(30,30,30,0.85);
+  border: 1px solid #3c3c3c;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  backdrop-filter: blur(2px);
+  z-index: 10;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hud-row { display: flex; gap: 4px; }
+.hud-label { color: #569cd6; }
+.hud-row.status-dead { color: #f44747; }
+.hud-row.status-escaped { color: #4ec9b0; }
