@@ -2,6 +2,7 @@ import React from 'react';
 import CodeLine from './CodeLine';
 import Bug from './Bug';
 import HUD from './HUD';
+import CompilerScan from './CompilerScan';
 
 const CodeEditor = () => {
   // Sample code lines with syntax highlighting
@@ -57,6 +58,7 @@ const CodeEditor = () => {
             />
           ))}
           <Bug totalLines={codeLines[codeLines.length - 1].lineNumber} />
+          <CompilerScan />
           {/* Cursor */}
           <div className="editor-cursor"></div>
         </div>

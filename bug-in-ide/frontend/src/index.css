@@ -578,3 +578,25 @@ button:focus-visible {
 .hud-label { color: #569cd6; }
 .hud-row.status-dead { color: #f44747; }
 .hud-row.status-escaped { color: #4ec9b0; }
+
+/* Compiler Scan Laser */
+.compiler-scan-laser {
+  position: absolute;
+  left: 0;
+  width: 0;
+  background: linear-gradient(90deg, rgba(255,0,0,0.1), #ff2d2d 35%, #ff6b6b 60%, rgba(255,0,0,0.1));
+  box-shadow: 0 0 6px 2px rgba(255,50,50,0.6), 0 0 18px 4px rgba(255,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: 2px;
+}
+.compiler-scan-laser.active {
+  animation: compiler-scan-move var(--scan-duration,1600ms) linear forwards;
+  opacity: 1;
+}
+@keyframes compiler-scan-move {
+  0% { width: 0; transform: translateX(0); }
+  5% { width: 40px; }
+  50% { width: 55vw; }
+  100% { width: 100%; transform: translateX(0); }
+}
