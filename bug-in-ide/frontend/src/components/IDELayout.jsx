@@ -1,7 +1,21 @@
 import React from 'react';
 import CodeEditor from './CodeEditor';
+import CompilerScan from './CompilerScan';
 
 const IDELayout = () => {
+  const [gameOver, setGameOver] = React.useState(false);
+  const [bugPosition, setBugPosition] = React.useState(12); // Bug on line 12
+
+  const handleGameOver = () => {
+    setGameOver(true);
+    alert('🐛 GAME OVER! The compiler found your bug!');
+    // Reset after 3 seconds
+    setTimeout(() => {
+      setGameOver(false);
+      setBugPosition(Math.floor(Math.random() * 25) + 1); // New random bug position
+    }, 3000);
+  };
+
   return (
     <div className="ide-container">
       {/* Left Sidebar */}
@@ -80,7 +94,27 @@ const IDELayout = () => {
         </div>
 
         {/* Code Editor */}
-        <CodeEditor />
+        <div style={{ position: 'relative' }}>
+          <CodeEditor />
+          
+          {/* Compiler Scan Overlay */}
+          <CompilerScan 
+            bugPosition={bugPosition}
+            onGameOver={handleGameOver}
+            isActive={!gameOver}
+          />
+          
+          {/* Game Over Overlay */}
+          {gameOver && (
+            <div className="game-over-overlay">
+              <div className="game-over-message">
+                <h2>🐛 BUG DETECTED!</h2>
+                <p>The compiler found your bug on line {bugPosition}</p>
+                <p>Restarting scan...</p>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Bottom Terminal Panel */}
         <div className="terminal-panel">
