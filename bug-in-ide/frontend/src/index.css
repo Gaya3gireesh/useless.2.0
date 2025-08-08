@@ -1,11 +1,11 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: dark;
+  color: #cccccc;
+  background-color: #1e1e1e;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,10 +24,12 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #1e1e1e;
+  color: #cccccc;
+  overflow: hidden;
 }
 
 h1 {
@@ -54,15 +56,480 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* VSCode IDE Layout Styles */
+.ide-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: #1e1e1e;
+  color: #cccccc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 240px;
+  background-color: #252526;
+  border-right: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  padding: 8px;
+  background-color: #2d2d30;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.sidebar-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #cccccc;
+}
+
+.sidebar-icon:hover {
+  background-color: #37373d;
+}
+
+.sidebar-icon.active {
+  background-color: #094771;
+}
+
+.file-explorer {
+  flex: 1;
+  padding: 8px 0;
+}
+
+.explorer-header {
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #cccccc;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.file-tree {
+  padding: 0 8px;
+}
+
+.folder, .file {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.folder:hover, .file:hover {
+  background-color: #2a2d2e;
+}
+
+.file.indent {
+  padding-left: 24px;
+}
+
+.folder-icon, .file-icon {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+}
+
+/* Tab Bar Styles */
+.tab-bar {
+  display: flex;
+  background-color: #2d2d30;
+  border-bottom: 1px solid #3c3c3c;
+  min-height: 35px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #2d2d30;
+  border-right: 1px solid #3c3c3c;
+  cursor: pointer;
+  font-size: 13px;
+  max-width: 150px;
+}
+
+.tab:hover {
+  background-color: #1e1e1e;
+}
+
+.tab.active {
+  background-color: #1e1e1e;
+  border-bottom: 2px solid #007acc;
+}
+
+.tab-icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.tab-close {
+  margin-left: 8px;
+  background: none;
+  border: none;
+  color: #cccccc;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}
+
+.tab-close:hover {
+  background-color: #424242;
+}
+
+/* Editor Styles */
+.editor-container {
+  flex: 1;
+  display: flex;
+  background-color: #1e1e1e;
+  overflow: hidden;
+}
+
+.line-numbers {
+  background-color: #1e1e1e;
+  padding: 8px 8px 8px 16px;
+  border-right: 1px solid #3c3c3c;
+  min-width: 50px;
+  text-align: right;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  color: #858585;
+  line-height: 19px;
+}
+
+.line-number {
+  height: 19px;
+  user-select: none;
+}
+
+.code-area {
+  flex: 1;
+  padding: 8px 16px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 19px;
+  color: #d4d4d4;
+  overflow: auto;
+}
+
+.code-line {
+  height: 19px;
+  white-space: pre;
+}
+
+.cursor-line {
+  background-color: #2d2d30;
+}
+
+/* Syntax Highlighting */
+.keyword {
+  color: #569cd6;
+}
+
+.string {
+  color: #ce9178;
+}
+
+.punctuation {
+  color: #d4d4d4;
+}
+
+.function {
+  color: #dcdcaa;
+}
+
+.variable {
+  color: #9cdcfe;
+}
+
+.operator {
+  color: #d4d4d4;
+}
+
+.tag {
+  color: #569cd6;
+}
+
+.attribute {
+  color: #92c5f8;
+}
+
+.cursor {
+  color: #aeafad;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* Terminal Panel Styles */
+.terminal-panel {
+  height: 200px;
+  background-color: #1e1e1e;
+  border-top: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2d2d30;
+  border-bottom: 1px solid #3c3c3c;
+  padding: 0 8px;
+  min-height: 35px;
+}
+
+.terminal-tabs {
+  display: flex;
+}
+
+.terminal-tab {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #cccccc;
+}
+
+.terminal-tab:hover {
+  background-color: #37373d;
+}
+
+.terminal-tab.active {
+  background-color: #1e1e1e;
+  border-bottom: 2px solid #007acc;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.terminal-btn {
+  background: none;
+  border: none;
+  color: #cccccc;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+.terminal-btn:hover {
+  background-color: #37373d;
+}
+
+.terminal-content {
+  flex: 1;
+  padding: 8px 16px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 18px;
+  background-color: #0c0c0c;
+  color: #cccccc;
+  overflow-y: auto;
+}
+
+.terminal-line {
+  margin-bottom: 2px;
+}
+
+.terminal-prompt {
+  color: #98c379;
+}
+
+.terminal-path {
+  color: #61afef;
+}
+
+.terminal-command {
+  color: #d4d4d4;
+}
+
+.terminal-output {
+  color: #cccccc;
+}
+
+.terminal-cursor {
+  color: #cccccc;
+  animation: blink 1s infinite;
+}
+
+/* CodeLine Component Styles */
+.code-line {
+  display: flex;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 21px;
+  white-space: pre;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
+
+.code-line:hover {
+  background-color: #2d2d30;
+}
+
+.line-number {
+  display: inline-block;
+  width: 50px;
+  padding-right: 16px;
+  text-align: right;
+  color: #858585;
+  user-select: none;
+  flex-shrink: 0;
+  border-right: 1px solid #333;
+  margin-right: 16px;
+}
+
+.code-content {
+  flex: 1;
+  padding-left: 4px;
+}
+
+/* Additional Syntax Highlighting for CodeLine */
+.code-line .keyword {
+  color: #569cd6;
+  font-weight: 500;
+}
+
+.code-line .string {
+  color: #ce9178;
+}
+
+.code-line .number {
+  color: #b5cea8;
+}
+
+.code-line .comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+.code-line .function {
+  color: #dcdcaa;
+}
+
+.code-line .operator {
+  color: #d4d4d4;
+}
+
+.code-line .punctuation {
+  color: #d4d4d4;
+}
+
+/* Integrated Code Editor Styles */
+.ide-code-editor-integrated {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e1e1e;
+  overflow: hidden;
+}
+
+.ide-code-editor-integrated .editor-content {
+  flex: 1;
+  display: flex;
+  background-color: #1e1e1e;
+  overflow: hidden;
+  position: relative;
+}
+
+.ide-code-editor-integrated .line-numbers-gutter {
+  background-color: #1e1e1e;
+  padding: 8px 8px 8px 16px;
+  border-right: 1px solid #3c3c3c;
+  min-width: 50px;
+  text-align: right;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  color: #858585;
+  line-height: 19px;
+  user-select: none;
+  overflow: hidden;
+}
+
+.ide-code-editor-integrated .line-number-item {
+  height: 19px;
+  padding-right: 8px;
+}
+
+.ide-code-editor-integrated .line-number-item:hover {
+  color: #cccccc;
+}
+
+.ide-code-editor-integrated .code-content-area {
+  flex: 1;
+  padding: 8px 16px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 19px;
+  color: #d4d4d4;
+  overflow: auto;
+  background-color: #1e1e1e;
+  position: relative;
+}
+
+.ide-code-editor-integrated .code-line {
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  height: 19px;
+  display: block;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.ide-code-editor-integrated .code-line:hover {
+  background-color: #2d2d30;
+}
+
+.ide-code-editor-integrated .code-content {
+  display: block;
+  padding: 0;
+}
+
+.ide-code-editor-integrated .editor-cursor {
+  position: absolute;
+  width: 2px;
+  height: 19px;
+  background-color: #ffffff;
+  top: 228px; /* Position it around line 12 */
+  left: 200px;
+  animation: cursor-blink 1s infinite;
+  z-index: 1;
 }
