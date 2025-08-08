@@ -1,5 +1,7 @@
 import React from 'react';
 import CodeLine from './CodeLine';
+import Bug from './Bug';
+import HUD from './HUD';
 
 const CodeEditor = () => {
   // Sample code lines with syntax highlighting
@@ -33,6 +35,7 @@ const CodeEditor = () => {
 
   return (
     <div className="ide-code-editor-integrated">
+      <HUD />
       {/* Editor Content */}
       <div className="editor-content">
         {/* Line Numbers Gutter */}
@@ -53,7 +56,7 @@ const CodeEditor = () => {
               text={line.text}
             />
           ))}
-          
+          <Bug totalLines={codeLines[codeLines.length - 1].lineNumber} />
           {/* Cursor */}
           <div className="editor-cursor"></div>
         </div>
