@@ -1,0 +1,27 @@
+[
+  {
+    "x": 150,
+    "y": 200,
+    "description": "Portal to Level 2"
+  },
+  {
+    "x": 300,
+    "y": 450,
+    "description": "Exit Portal"
+  },
+  {
+    "x": 75,
+    "y": 320,
+    "description": "Escape Route"
+  },
+  {
+    "x": 500,
+    "y": 100,
+    "description": "Debug Portal"
+  },
+  {
+    "x": 400,
+    "y": 350,
+    "description": "Safe Zone Portal"
+  }
+]

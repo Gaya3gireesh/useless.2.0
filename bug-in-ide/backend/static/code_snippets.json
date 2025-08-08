@@ -1,0 +1,27 @@
+[
+  {
+    "code": "function calculateSum(a, b) {\n  return a + b;\n}\n\nconst result = calculateSum(5, 3);\nconsole.log(result);",
+    "language": "javascript",
+    "filename": "calculator.js"
+  },
+  {
+    "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))",
+    "language": "python",
+    "filename": "fib.py"
+  },
+  {
+    "code": "class User {\n  constructor(name, email) {\n    this.name = name;\n    this.email = email;\n  }\n\n  greet() {\n    return `Hello, ${this.name}!`;\n  }\n}",
+    "language": "javascript",
+    "filename": "user.js"
+  },
+  {
+    "code": "import React from 'react';\n\nconst Button = ({ onClick, children }) => {\n  return (\n    <button onClick={onClick}>\n      {children}\n    </button>\n  );\n};\n\nexport default Button;",
+    "language": "jsx",
+    "filename": "Button.jsx"
+  },
+  {
+    "code": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}",
+    "language": "go",
+    "filename": "hello.go"
+  }
+]

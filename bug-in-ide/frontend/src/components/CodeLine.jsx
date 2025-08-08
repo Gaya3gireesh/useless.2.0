@@ -1,6 +1,7 @@
 import React from 'react';
+import { ERROR_TYPES } from '../utils/codeGenerator';
 
-const CodeLine = ({ lineNumber, text }) => {
+const CodeLine = ({ lineNumber, text, hasError, errorType }) => {
   // Simple syntax highlighting function
   const highlightSyntax = (code) => {
     if (!code) return code;
@@ -164,11 +165,20 @@ const CodeLine = ({ lineNumber, text }) => {
   };
 
   return (
-    <div className="code-line">
+    <div className={`code-line ${hasError ? 'has-error' : ''}`}>
       <span 
         className="code-content"
         dangerouslySetInnerHTML={{ __html: highlightSyntax(text) }}
       />
+      {hasError && (
+        <span 
+          className="error-indicator"
+          style={{ color: ERROR_TYPES[errorType]?.color || '#f44747' }}
+          title={ERROR_TYPES[errorType]?.description || 'Syntax error'}
+        >
+          ⚠
+        </span>
+      )}
     </div>
   );
 };
