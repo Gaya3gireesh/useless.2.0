@@ -102,13 +102,13 @@ Survive as long as possible while the compiler scan moves line by line. Use synt
 
 
 # Screenshots (Add at least 3)
-![Start Screen](images/Image1.png)
+![Start Screen](images/Image1.jpg)
 *Professional IDE-themed start screen with game instructions, controls explanation, and the iconic "START DEBUGGING SESSION" button that welcomes players to the bug hunting experience*
 
-![Active Gameplay](images/Image2.png)
+![Active Gameplay](images/Image2.jpg)
 *Live gameplay showing the bug character (🐞) hiding among code lines while the red compiler scan laser moves through the editor. Notice the syntax error indicators (🚨) that provide safe hiding spots*
 
-![Game Interface](images/Image3.png)
+![Game Interface](images/Image3.jpg)
 *Complete game interface featuring the HUD with win conditions tracker, survival statistics, and control buttons. Shows the realistic IDE layout with line numbers and syntax highlighting*
 
 
