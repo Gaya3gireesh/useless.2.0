@@ -2,8 +2,8 @@ import { create } from 'zustand';
 import { generateCodeWithErrors } from '../utils/codeGenerator';
 
 // Initial positions
-const INITIAL_LINE = 1;
-const INITIAL_COLUMN = 1; // placeholder for future horizontal movement
+const INITIAL_LINE = 5; // Start bug on line 5 to give some safety buffer
+const INITIAL_COLUMN = 10; // Start with some column offset
 
 export const useGameStore = create((set, get) => ({
   // Game state
@@ -19,8 +19,8 @@ export const useGameStore = create((set, get) => ({
   
   // Win conditions - Clear and precise
   winConditions: {
-    targetScans: 5,   // Reduced for better gameplay - Win after surviving 5 complete scans
-    targetTime: 30,   // Reduced for better gameplay - Win after 30 seconds
+    targetScans: 5,   // Win after surviving 5 complete scans
+    targetTime: 60,   // Win after 60 seconds
   },
   
   // Game state flags for efficient checking
@@ -35,8 +35,10 @@ export const useGameStore = create((set, get) => ({
   compilerScan: {
     currentLine: 0,
     isActive: false,
-    speed: 1500, // ms per line - faster for better gameplay
-    lastScanTime: 0
+    speed: 2000, // ms per line - starting speed (slower at beginning)
+    lastScanTime: 0,
+    baseSpeed: 2000, // Base speed for calculations
+    speedIncrement: 100, // Speed increase per scan cycle
   },
   
   // Code lines with error information
@@ -44,6 +46,11 @@ export const useGameStore = create((set, get) => ({
   
   // Game mechanics
   hiddenInError: false,
+  
+  // Random events system
+  lastEventTime: 0,
+  eventCooldown: 20000, // 20 seconds between possible events
+  activeEvent: null,
 
   // Direct setters
   setBugPosition: ({ line, column }) => {
@@ -116,12 +123,15 @@ export const useGameStore = create((set, get) => ({
       const maxLines = codeLines.length;
       
       if (nextLine > maxLines) {
-        // Scan completed - increment survived scans and restart
+        // Scan completed - increment survived scans, increase speed, and restart
+        const newSpeed = Math.max(800, compilerScan.speed - compilerScan.speedIncrement); // Minimum 800ms, gets faster
+        
         set(state => ({
           compilerScan: {
             ...state.compilerScan,
             currentLine: 1,
-            lastScanTime: now
+            lastScanTime: now,
+            speed: newSpeed // Increase speed each cycle
           },
           scansSurvived: state.scansSurvived + 1,
           gameFlags: { ...state.gameFlags, lastCheckedLine: 0 } // Reset line check
@@ -171,7 +181,7 @@ export const useGameStore = create((set, get) => ({
     return false;
   },
 
-  // Optimized and clear-cut bug detection
+  // Instant game over when scan touches bug's line - simplified logic
   checkBugDetection: () => {
     const { bug, compilerScan, hiddenInError, status, gameFlags } = get();
     
@@ -180,18 +190,19 @@ export const useGameStore = create((set, get) => ({
       return false;
     }
     
-    // Only check if scan line has actually changed and matches bug position
+    // INSTANT GAME OVER: When scan reaches bug's line
     if (compilerScan.currentLine === bug.line && 
         compilerScan.currentLine > 0 && 
+        compilerScan.isActive && // Ensure scan is actually active
         compilerScan.currentLine !== gameFlags.lastCheckedLine) {
       
       let detectionChance;
       
       if (hiddenInError) {
-        // CLEAR RULE: 30% detection when hidden in syntax error
-        detectionChance = 0.3;
+        // 30% chance to survive when hidden in syntax error
+        detectionChance = 0.7; // 70% protection = 30% detection
       } else {
-        // CLEAR RULE: 100% detection when NOT hidden in error
+        // INSTANT DEATH: 100% detection when NOT hidden in error
         detectionChance = 1.0;
       }
       
@@ -200,12 +211,16 @@ export const useGameStore = create((set, get) => ({
         gameFlags: { ...state.gameFlags, lastCheckedLine: compilerScan.currentLine }
       }));
       
-      // Roll for detection
+      // Roll for detection - if detected, instant game over
       if (Math.random() < detectionChance) {
         set(state => ({ 
           status: 'dead',
           gameFlags: { ...state.gameFlags, hasDied: true }
         }));
+        
+        // Stop the compiler scan
+        const { stopCompilerScan } = get();
+        stopCompilerScan();
         
         // Visual feedback
         setTimeout(() => {
@@ -219,8 +234,138 @@ export const useGameStore = create((set, get) => ({
     return false;
   },
   
+  // Random event system for extra fun
+  triggerRandomEvent: () => {
+    const { status, lastEventTime, eventCooldown, elapsedTime } = get();
+    
+    if (status !== 'alive') return;
+    
+    const now = Date.now();
+    if (now - lastEventTime < eventCooldown) return;
+    
+    // 15% chance of triggering an event
+    if (Math.random() < 0.15) {
+      const events = [
+        {
+          type: 'syntax_storm',
+          name: 'Syntax Storm',
+          description: 'More syntax errors appear! 🌪️',
+          effect: 'Regenerates code with more errors',
+          duration: 0
+        },
+        {
+          type: 'code_cleanup',
+          name: 'Code Cleanup Bot',
+          description: 'Auto-formatter removes some errors! 🤖',
+          effect: 'Reduces number of syntax errors',
+          duration: 0
+        },
+        {
+          type: 'debug_freeze',
+          name: 'Debug Freeze',
+          description: 'Scan pauses for 3 seconds! ❄️',
+          effect: 'Temporarily stops compiler scan',
+          duration: 3000
+        }
+      ];
+      
+      const randomEvent = events[Math.floor(Math.random() * events.length)];
+      
+      set(state => ({
+        activeEvent: randomEvent,
+        lastEventTime: now
+      }));
+      
+      // Apply event effect
+      const { applyEventEffect } = get();
+      applyEventEffect(randomEvent);
+      
+      // Clear event after display duration
+      setTimeout(() => {
+        set(state => ({ activeEvent: null }));
+      }, 3000);
+    }
+  },
+  
+  // Helper function to apply event effects
+  applyEventEffect: (event) => {
+    switch (event.type) {
+      case 'syntax_storm':
+        // Regenerate code with more errors
+        set({ codeLines: generateCodeWithErrors() });
+        break;
+      case 'code_cleanup':
+        // Reduce errors in current code
+        const { codeLines } = get();
+        const cleanedLines = codeLines.map(line => ({
+          ...line,
+          hasError: line.hasError && Math.random() > 0.6 // 40% chance to keep error
+        }));
+        set({ codeLines: cleanedLines });
+        break;
+      case 'debug_freeze':
+        // Temporarily stop scan
+        set(state => ({
+          compilerScan: { ...state.compilerScan, isActive: false }
+        }));
+        
+        // Resume after duration
+        setTimeout(() => {
+          const currentState = get();
+          if (currentState.status === 'alive') {
+            set(state => ({
+              compilerScan: { ...state.compilerScan, isActive: true }
+            }));
+          }
+        }, event.duration);
+        break;
+    }
+  },
+  
   // Game control methods
-  startGame: () => set({ gameStarted: true }),
+  startGame: () => {
+    // Reset the game state and start fresh
+    set({
+      gameStarted: true,
+      bug: { line: INITIAL_LINE, column: INITIAL_COLUMN },
+      elapsedTime: 0,
+      scansSurvived: 0,
+      status: 'alive',
+      codeLines: generateCodeWithErrors(),
+      hiddenInError: false,
+      lastEventTime: 0,
+      activeEvent: null,
+      compilerScan: {
+        currentLine: 0,
+        isActive: false, // Don't start immediately
+        speed: 2000,
+        lastScanTime: 0,
+        baseSpeed: 2000,
+        speedIncrement: 100,
+      },
+      gameFlags: {
+        hasWon: false,
+        hasDied: false,
+        scanInProgress: false,
+        lastCheckedLine: 0,
+      }
+    });
+    
+    // Start the compiler scan after a 2-second delay to give player time
+    setTimeout(() => {
+      const currentState = get();
+      if (currentState.status === 'alive' && currentState.gameStarted) {
+        set(state => ({
+          compilerScan: {
+            ...state.compilerScan,
+            isActive: true,
+            currentLine: 1,
+            lastScanTime: Date.now()
+          }
+        }));
+      }
+    }, 2000);
+  },
   
   // Generate new code with errors
   regenerateCode: () => set({
@@ -241,27 +386,48 @@ export const useGameStore = create((set, get) => ({
   },
   incrementScans: () => set(state => ({ scansSurvived: state.scansSurvived + 1 })),
   setStatus: (status) => set({ status }),
-  resetGame: () => set({
-    gameStarted: true, // Keep game started when resetting
-    bug: { line: INITIAL_LINE, column: INITIAL_COLUMN },
-    elapsedTime: 0,
-    scansSurvived: 0,
-    status: 'alive',
-    codeLines: generateCodeWithErrors(),
-    hiddenInError: false,
-    compilerScan: {
-      currentLine: 0,
-      isActive: false,
-      speed: 1500,
-      lastScanTime: 0
-    },
-    gameFlags: {
-      hasWon: false,
-      hasDied: false,
-      scanInProgress: false,
-      lastCheckedLine: 0,
-    }
-  }),
+  resetGame: () => {
+    set({
+      gameStarted: true, // Keep game started when resetting
+      bug: { line: INITIAL_LINE, column: INITIAL_COLUMN },
+      elapsedTime: 0,
+      scansSurvived: 0,
+      status: 'alive',
+      codeLines: generateCodeWithErrors(),
+      hiddenInError: false,
+      lastEventTime: 0,
+      activeEvent: null,
+      compilerScan: {
+        currentLine: 0,
+        isActive: false, // Don't start immediately
+        speed: 2000, // Reset to base speed
+        lastScanTime: 0,
+        baseSpeed: 2000,
+        speedIncrement: 100,
+      },
+      gameFlags: {
+        hasWon: false,
+        hasDied: false,
+        scanInProgress: false,
+        lastCheckedLine: 0,
+      }
+    });
+    
+    // Start the compiler scan after a 2-second delay
+    setTimeout(() => {
+      const currentState = get();
+      if (currentState.status === 'alive' && currentState.gameStarted) {
+        set(state => ({
+          compilerScan: {
+            ...state.compilerScan,
+            isActive: true,
+            currentLine: 1,
+            lastScanTime: Date.now()
+          }
+        }));
+      }
+    }, 2000);
+  },
 }));
 
 export default useGameStore;

@@ -46,11 +46,11 @@ const CompilerScan = ({ totalLines = 25, thickness = 4 }) => {
     }
 
     const gameLoop = () => {
-      if (compilerScan.isActive) {
+      if (compilerScan.isActive && status === 'alive') {
         updateCompilerScan();
         
         // Check for bug detection when scan moves to a new line
-        if (compilerScan.currentLine !== prevLineRef.current) {
+        if (compilerScan.currentLine !== prevLineRef.current && compilerScan.currentLine > 0) {
           checkBugDetection();
           prevLineRef.current = compilerScan.currentLine;
         }

@@ -63,7 +63,7 @@ const GameOverModal = () => {
             <div className="output-header">COMPILER OUTPUT:</div>
             <div className="output-text">
               <div className="output-line">Compilation failed with 1 error</div>
-              <div className="output-line error">Error: Bug entity detected at runtime</div>
+              <div className="output-line error">Error: Bug entity detected at runtime in Bug-in-IDE</div>
               <div className="output-line">  Expected: Clean code execution</div>
               <div className="output-line">  Actual: Unauthorized bug presence</div>
               <div className="output-line warning">Warning: System security compromised</div>

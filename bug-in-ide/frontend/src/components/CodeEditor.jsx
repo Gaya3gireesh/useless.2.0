@@ -3,6 +3,9 @@ import CodeLine from './CodeLine';
 import Bug from './Bug';
 import HUD from './HUD';
 import CompilerScan from './CompilerScan';
+import PowerUp from './PowerUp';
+import EventNotification from './EventNotification';
+import ScanCountdown from './ScanCountdown';
 import GameOverModal from './GameOverModal';
 import VictoryModal from './VictoryModal';
 import { useGameStore } from '../store/gameStore';
@@ -36,6 +39,7 @@ const CodeEditor = ({ fileName }) => {
             />
           ))}
           <Bug totalLines={codeLines[codeLines.length - 1].lineNumber} />
+          <PowerUp totalLines={codeLines[codeLines.length - 1].lineNumber} />
           <CompilerScan totalLines={codeLines.length} />
           {/* Cursor */}
           <div className="editor-cursor"></div>
@@ -47,6 +51,12 @@ const CodeEditor = ({ fileName }) => {
       
       {/* Victory Modal */}
       <VictoryModal />
+      
+      {/* Event Notifications */}
+      <EventNotification />
+      
+      {/* Scan Countdown */}
+      <ScanCountdown />
     </div>
   );
 };

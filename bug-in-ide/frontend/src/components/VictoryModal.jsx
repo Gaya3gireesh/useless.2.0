@@ -43,7 +43,7 @@ const VictoryModal = () => {
               <div className="banner-icon">🏆</div>
               <div className="banner-text">
                 <h2>CONGRATULATIONS!</h2>
-                <p>You've successfully evaded the compiler scan system!</p>
+                <p>You've successfully evaded the compiler scan system and mastered Bug-in-IDE!</p>
               </div>
             </div>
             
